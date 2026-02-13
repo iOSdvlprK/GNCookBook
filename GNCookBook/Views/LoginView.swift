@@ -20,6 +20,7 @@ struct LoginView: View {
                 .keyboardType(.emailAddress)
                 .textInputAutocapitalization(.never)
             Rectangle()
+                .fill(.border)
                 .frame(height: 1)
                 .padding(.bottom, 15)
             Text("Password")
@@ -27,8 +28,35 @@ struct LoginView: View {
             SecureField("Password", text: $password)
                 .font(.system(size: 14))
             Rectangle()
+                .fill(.border)
                 .frame(height: 1)
                 .padding(.bottom, 15)
+            
+            Button(action: {
+                
+            }, label: {
+                Text("Login")
+                    .font(.system(size: 15, weight: .semibold))
+                    .padding(12)
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .background(.green)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+            })
+            
+            HStack {
+                Spacer()
+                Text("Don't have an account?")
+                    .font(.system(size: 14))
+                Button(action: {
+                    
+                }, label: {
+                    Text("Register now")
+                        .font(.system(size: 14, weight: .semibold))
+                })
+                Spacer()
+            }
+            .padding(.top, 20)
         }
         .padding(.horizontal, 10)
     }
