@@ -12,4 +12,5 @@ class LoginViewModel {
     var presentRegisterView = false
     var email = ""
     var password = ""
+    var showPassword = false
 }
