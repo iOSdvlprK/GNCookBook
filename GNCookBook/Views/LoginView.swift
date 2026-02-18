@@ -20,27 +20,7 @@ struct LoginView: View {
             Text("Password")
                 .font(.system(size: 15))
             
-            Group {
-                if viewModel.showPassword {
-                    TextField("Password", text: $viewModel.password)
-                } else {
-                    SecureField("Password", text: $viewModel.password)
-                }
-            }
-            .font(.system(size: 14))
-            .overlay(alignment: .trailing) {
-                Button(action: {
-                    viewModel.showPassword.toggle()
-                }, label: {
-                    Image(systemName: viewModel.showPassword ? "eye" : "eye.slash")
-                        .foregroundStyle(.black)
-                        .padding(.bottom, 4)
-                })
-            }
-            Rectangle()
-                .fill(.border)
-                .frame(height: 1)
-                .padding(.bottom, 15)
+            PasswordComponentView(showPassword: $viewModel.showPassword, password: $viewModel.password)
             
             Button(action: {
                 
