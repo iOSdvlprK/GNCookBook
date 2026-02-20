@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct HomeView: View {
+    @Environment(SessionManager.self) private var sessionManager
+    
     var body: some View {
         VStack {
             Text("Cooking Book App!")
@@ -17,4 +19,5 @@ struct HomeView: View {
 
 #Preview {
     HomeView()
+        .environment(SessionManager())
 }

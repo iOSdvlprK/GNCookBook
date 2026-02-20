@@ -9,9 +9,18 @@ import SwiftUI
 
 @main
 struct GNCookBookApp: App {
+    @State private var sessionManager = SessionManager()
+    
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            switch sessionManager.sessionState {
+            case .loggedIn:
+                HomeView()
+                    .environment(sessionManager)
+            case .loggedOut:
+                LoginView()
+                    .environment(sessionManager)
+            }
         }
     }
 }
