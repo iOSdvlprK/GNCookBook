@@ -11,6 +11,20 @@ struct HomeView: View {
     @State private var viewModel = HomeViewModel()
     @Environment(SessionManager.self) private var sessionManager
     
+    fileprivate func RecipeRow(recipe: Recipe) -> some View {
+        VStack(alignment: .leading) {
+            Image(recipe.image)
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: itemWidth, height: itemHeight)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .clipped()
+            Text(recipe.name)
+                .lineLimit(1)
+                .font(.system(size: 15, weight: .semibold))
+        }
+    }
+    
     let spacing: CGFloat = 5
     let padding: CGFloat = 5
     
@@ -27,38 +41,8 @@ struct HomeView: View {
         NavigationStack {
             VStack {
                 HStack(spacing: spacing) {
-                    VStack(alignment: .leading) {
-                        Image(Recipe.mockRecipes[0].image)
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: itemWidth, height: itemHeight)
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                            .clipped()
-                        Text(Recipe.mockRecipes[0].name)
-                            .lineLimit(1)
-                            .font(.system(size: 15, weight: .semibold))
-                    }
-                    VStack(alignment: .leading) {
-                        Image(Recipe.mockRecipes[1].image)
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: itemWidth, height: itemHeight)
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                            .clipped()
-                        Text(Recipe.mockRecipes[1].name)
-                            .lineLimit(1)
-                            .font(.system(size: 15, weight: .semibold))
-                    }
-                    VStack(alignment: .leading) {
-                        Image(Recipe.mockRecipes[2].image)
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: itemWidth, height: itemHeight)
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                            .clipped()
-                        Text(Recipe.mockRecipes[2].name)
-                            .lineLimit(1)
-                            .font(.system(size: 15, weight: .semibold))
+                    ForEach(0...2, id: \.self) { index in
+                        RecipeRow(recipe: Recipe.mockRecipes[index])
                     }
                 }
                 .padding(.horizontal, padding)
