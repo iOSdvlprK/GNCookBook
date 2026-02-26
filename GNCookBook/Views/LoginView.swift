@@ -27,13 +27,8 @@ struct LoginView: View {
                 sessionManager.sessionState = .loggedIn
             }, label: {
                 Text("Login")
-                    .font(.system(size: 15, weight: .semibold))
-                    .padding(12)
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .background(.green)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
             })
+            .buttonStyle(PrimaryButtonStyle())
             
             HStack {
                 Spacer()

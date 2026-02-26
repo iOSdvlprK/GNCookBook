@@ -31,13 +31,8 @@ struct RegisterView: View {
                 
             }, label: {
                 Text("Sign Up")
-                    .font(.system(size: 15, weight: .semibold))
-                    .padding(12)
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .background(.green)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
             })
+            .buttonStyle(PrimaryButtonStyle())
             HStack {
                 Spacer()
                 Text("Already have an account?")

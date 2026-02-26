@@ -50,7 +50,12 @@ struct AddRecipeView: View {
                 .background(.primaryFormEntry)
                 .scrollContentBackground(.hidden)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
-            
+            Button(action: {
+                
+            }, label: {
+                Text("Add Recipe")
+            })
+            .buttonStyle(PrimaryButtonStyle())
             Spacer()
         }
         .padding(.horizontal)
