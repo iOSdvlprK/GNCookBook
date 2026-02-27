@@ -10,4 +10,5 @@ import Foundation
 @Observable
 class HomeViewModel {
     var showSignOutAlert = false
+    var showAddRecipeView = false
 }

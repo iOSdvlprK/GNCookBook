@@ -52,6 +52,13 @@ struct HomeView: View {
                 }
                 .padding(.horizontal, padding)
                 Spacer()
+                Button(action: {
+                    viewModel.showAddRecipeView = true
+                }, label: {
+                    Text("Add Recipe")
+                })
+                .buttonStyle(PrimaryButtonStyle())
+                .padding(.horizontal)
             }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -70,6 +77,9 @@ struct HomeView: View {
                 Button("Cancel", role: .cancel) {
                 }
             }
+        }
+        .sheet(isPresented: $viewModel.showAddRecipeView) {
+            AddRecipeView()
         }
     }
 }
