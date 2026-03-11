@@ -16,8 +16,10 @@ class RegisterViewModel {
     var showPassword = false
     var password = ""
     var isLoading = false
+    var errorMessage = ""
+    var presentAlert = false
     
-    func signup() async {
+    func signup() async -> Bool {
         do {
             isLoading = true
             let result = try await Auth.auth().createUser(withEmail: email, password: password)
@@ -28,8 +30,23 @@ class RegisterViewModel {
             ]
             try await Firestore.firestore().collection("users").document(userId).setData(userData)
             isLoading = false
+            return true
         } catch {
+            errorMessage = "Login Failed"
+            let errorCode = (error as NSError).code
+            if let authErrorCode = AuthErrorCode(rawValue: errorCode) {
+                switch authErrorCode {
+                case .emailAlreadyInUse:
+                    errorMessage = "Email Already In Use"
+                case .invalidEmail:
+                    errorMessage = "Invalid Email"
+                default:
+                    break
+                }
+            }
             isLoading = false
+            presentAlert = true
+            return false
         }
     }
 }
