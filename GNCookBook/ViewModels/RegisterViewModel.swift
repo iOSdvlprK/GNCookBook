@@ -20,6 +20,12 @@ class RegisterViewModel {
     var presentAlert = false
     
     func signup() async -> Bool {
+        guard validateUsername() else {
+            errorMessage = "Username must be greater than 3 characters and less than 25 characters."
+            presentAlert = true
+            return false
+        }
+        
         do {
             isLoading = true
             let result = try await Auth.auth().createUser(withEmail: email, password: password)
@@ -40,6 +46,8 @@ class RegisterViewModel {
                     errorMessage = "Email Already In Use"
                 case .invalidEmail:
                     errorMessage = "Invalid Email"
+                case .weakPassword:
+                    errorMessage = "Weak Password"
                 default:
                     break
                 }
@@ -48,5 +56,9 @@ class RegisterViewModel {
             presentAlert = true
             return false
         }
+    }
+    
+    func validateUsername() -> Bool {
+        username.count >= 3 && username.count < 25
     }
 }
