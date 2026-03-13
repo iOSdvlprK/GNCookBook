@@ -26,8 +26,23 @@ class RegisterViewModel {
             return false
         }
         
+        isLoading = true
+        
+        guard let usernameDocuments = try? await Firestore.firestore().collection("users").whereField("username", isEqualTo: username).getDocuments() else {
+            errorMessage = "Something has gone wrong. Please try again later."
+            presentAlert = true
+            isLoading = false
+            return false
+        }
+        
+        guard usernameDocuments.documents.count == 0 else {
+            errorMessage = "Username already exists."
+            presentAlert = true
+            isLoading = false
+            return false
+        }
+        
         do {
-            isLoading = true
             let result = try await Auth.auth().createUser(withEmail: email, password: password)
             let userId = result.user.uid
             let userData: [String: Any] = [
