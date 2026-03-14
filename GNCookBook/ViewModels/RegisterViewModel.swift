@@ -19,11 +19,11 @@ class RegisterViewModel {
     var errorMessage = ""
     var presentAlert = false
     
-    func signup() async -> Bool {
+    func signup() async -> User? {
         guard validateUsername() else {
             errorMessage = "Username must be greater than 3 characters and less than 25 characters."
             presentAlert = true
-            return false
+            return nil
         }
         
         isLoading = true
@@ -32,26 +32,23 @@ class RegisterViewModel {
             errorMessage = "Something has gone wrong. Please try again later."
             presentAlert = true
             isLoading = false
-            return false
+            return nil
         }
         
         guard usernameDocuments.documents.count == 0 else {
             errorMessage = "Username already exists."
             presentAlert = true
             isLoading = false
-            return false
+            return nil
         }
         
         do {
             let result = try await Auth.auth().createUser(withEmail: email, password: password)
             let userId = result.user.uid
-            let userData: [String: Any] = [
-                "username": username,
-                "email": email
-            ]
-            try await Firestore.firestore().collection("users").document(userId).setData(userData)
+            let user = User(id: userId, username: username, email: email)
+            try Firestore.firestore().collection("users").document(userId).setData(from: user)
             isLoading = false
-            return true
+            return user
         } catch {
             errorMessage = "Login Failed"
             let errorCode = (error as NSError).code
@@ -69,7 +66,7 @@ class RegisterViewModel {
             }
             isLoading = false
             presentAlert = true
-            return false
+            return nil
         }
     }
     

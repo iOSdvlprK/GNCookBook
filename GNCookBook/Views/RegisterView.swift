@@ -31,7 +31,9 @@ struct RegisterView: View {
                 
                 Button(action: {
                     Task {
-                        await viewModel.signup()
+                        if let user = await viewModel.signup() {
+                            sessionManager.sessionState = .loggedIn
+                        }
                     }
                 }, label: {
                     Text("Sign Up")

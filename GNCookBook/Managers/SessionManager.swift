@@ -10,4 +10,5 @@ import Foundation
 @Observable
 class SessionManager {
     var sessionState: SessionState = .loggedOut
+    var currentUser: User?
 }
