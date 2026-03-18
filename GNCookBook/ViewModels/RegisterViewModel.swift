@@ -50,7 +50,7 @@ class RegisterViewModel {
             isLoading = false
             return user
         } catch {
-            errorMessage = "Login Failed"
+            errorMessage = "Sign Up Failed"
             let errorCode = (error as NSError).code
             if let authErrorCode = AuthErrorCode(rawValue: errorCode) {
                 switch authErrorCode {
