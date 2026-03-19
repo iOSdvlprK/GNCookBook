@@ -21,6 +21,9 @@ struct AddRecipeView: View {
                     .frame(height: 200)
                 Image(systemName: "photo.fill")
             }
+            .onTapGesture {
+                viewModel.showImageOptions = true
+            }
             Text("Recipe Name")
                 .font(.system(size: 15, weight: .semibold))
                 .padding(.top)
@@ -57,6 +60,23 @@ struct AddRecipeView: View {
             Spacer()
         }
         .padding(.horizontal)
+        .confirmationDialog("Upload an image to your recipe", isPresented: $viewModel.showImageOptions, titleVisibility: .visible) {
+            Button(action: {
+                
+            }, label: {
+                Text("Upload from Library")
+            })
+            Button(action: {
+                
+            }, label: {
+                Text("Upload from Camera")
+            })
+            Button(action: {
+                
+            }, label: {
+                Text("Cancel")
+            })
+        }
     }
 }
 
