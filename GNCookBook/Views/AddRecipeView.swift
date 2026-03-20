@@ -6,9 +6,11 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 struct AddRecipeView: View {
     @State private var viewModel = AddRecipeViewModel()
+    @State private var imageLoaderViewModel = ImageLoaderViewModel()
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -16,10 +18,20 @@ struct AddRecipeView: View {
                 .font(.system(size: 26, weight: .bold))
                 .padding(.top, 20)
             ZStack {
-                RoundedRectangle(cornerRadius: 6)
-                    .fill(.primaryFormEntry)
-                    .frame(height: 200)
-                Image(systemName: "photo.fill")
+                ZStack {
+                    RoundedRectangle(cornerRadius: 6)
+                        .fill(.primaryFormEntry)
+                        .frame(height: 200)
+                    Image(systemName: "photo.fill")
+                }
+                if let displayedRecipeImage = viewModel.displayedRecipeImage {
+                    displayedRecipeImage
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(height: 200)
+                        .clipShape(RoundedRectangle(cornerRadius: 6))
+                        .clipped()
+                }
             }
             .onTapGesture {
                 viewModel.showImageOptions = true
@@ -60,9 +72,15 @@ struct AddRecipeView: View {
             Spacer()
         }
         .padding(.horizontal)
+        .photosPicker(isPresented: $viewModel.showLibrary, selection: $imageLoaderViewModel.imageSelection, matching: .images, photoLibrary: .shared())
+        .onChange(of: imageLoaderViewModel.imageToUpload, { _, newValue in
+            if let newValue {
+                viewModel.displayedRecipeImage = Image(uiImage: newValue)
+            }
+        })
         .confirmationDialog("Upload an image to your recipe", isPresented: $viewModel.showImageOptions, titleVisibility: .visible) {
             Button(action: {
-                
+                viewModel.showLibrary = true
             }, label: {
                 Text("Upload from Library")
             })

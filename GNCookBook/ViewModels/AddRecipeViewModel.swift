@@ -5,7 +5,7 @@
 //  Created by joe on 2/27/26.
 //
 
-import Foundation
+import SwiftUI
 
 @Observable
 class AddRecipeViewModel {
@@ -13,4 +13,6 @@ class AddRecipeViewModel {
     var preparationTime = 0
     var instructions = ""
     var showImageOptions = false
+    var showLibrary = false
+    var displayedRecipeImage: Image?
 }
