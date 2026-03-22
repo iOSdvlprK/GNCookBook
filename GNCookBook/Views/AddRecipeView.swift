@@ -95,6 +95,11 @@ struct AddRecipeView: View {
                 Text("Cancel")
             })
         }
+        .fullScreenCover(isPresented: $viewModel.showCamera) {
+            CameraPicker { image in
+                viewModel.displayedRecipeImage = Image(uiImage: image)
+            }
+        }
     }
 }
 

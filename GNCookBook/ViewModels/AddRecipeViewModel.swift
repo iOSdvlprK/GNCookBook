@@ -15,4 +15,5 @@ class AddRecipeViewModel {
     var showImageOptions = false
     var showLibrary = false
     var displayedRecipeImage: Image?
+    var showCamera = false
 }
