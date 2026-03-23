@@ -85,7 +85,7 @@ struct AddRecipeView: View {
                 Text("Upload from Library")
             })
             Button(action: {
-                
+                viewModel.showCamera = true
             }, label: {
                 Text("Upload from Camera")
             })
