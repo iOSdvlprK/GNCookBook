@@ -76,6 +76,7 @@ struct AddRecipeView: View {
         .onChange(of: imageLoaderViewModel.imageToUpload, { _, newValue in
             if let newValue {
                 viewModel.displayedRecipeImage = Image(uiImage: newValue)
+                viewModel.recipeImage = newValue
             }
         })
         .confirmationDialog("Upload an image to your recipe", isPresented: $viewModel.showImageOptions, titleVisibility: .visible) {
@@ -98,6 +99,7 @@ struct AddRecipeView: View {
         .fullScreenCover(isPresented: $viewModel.showCamera) {
             CameraPicker { image in
                 viewModel.displayedRecipeImage = Image(uiImage: image)
+                viewModel.recipeImage = image
             }
         }
     }
