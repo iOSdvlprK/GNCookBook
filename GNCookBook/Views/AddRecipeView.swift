@@ -108,6 +108,9 @@ struct AddRecipeView: View {
             if viewModel.isUploading {
                 ProgressComponentView(value: $viewModel.uploadProgress)
             }
+            if viewModel.isLoading {
+                LoadingComponentView()
+            }
         }
     }
 }

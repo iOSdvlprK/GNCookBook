@@ -22,6 +22,7 @@ class AddRecipeViewModel {
     var showCamera = false
     var uploadProgress: Float = 0
     var isUploading = false
+    var isLoading = false
     
     func addRecipe() async {
         guard let userId = Auth.auth().currentUser?.uid else { return }
@@ -29,12 +30,19 @@ class AddRecipeViewModel {
         guard instructions.count >= 5 else { return }
         guard preparationTime != 0 else { return }
         guard let imageURL = await upload() else { return }
+        isLoading = true
         let ref = Firestore.firestore().collection("recipes").document()
         let recipe = Recipe(id: ref.documentID, name: recipeName, image: imageURL.absoluteString, instructions: instructions, time: preparationTime, userId: userId)
         do {
-            try Firestore.firestore().collection("recipes").document(ref.documentID).setData(from: recipe)
+            try Firestore.firestore().collection("recipes").document(ref.documentID).setData(from: recipe) { error in
+                if let error {
+                    print(error.localizedDescription)
+                }
+                self.isLoading = false
+            }
         } catch {
             print("DEBUG: Recipe Upload failed.")
+            isLoading = false
         }
     }
     
