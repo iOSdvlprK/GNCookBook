@@ -112,6 +112,15 @@ struct AddRecipeView: View {
                 LoadingComponentView()
             }
         }
+        .alert(viewModel.alertTitle, isPresented: $viewModel.showAlert) {
+            Button(action: {
+                
+            }, label: {
+                Text("OK")
+            })
+        } message: {
+            Text(viewModel.alertMessage)
+        }
     }
 }
 

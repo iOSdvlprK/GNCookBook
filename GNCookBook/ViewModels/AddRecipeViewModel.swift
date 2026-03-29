@@ -23,13 +23,28 @@ class AddRecipeViewModel {
     var uploadProgress: Float = 0
     var isUploading = false
     var isLoading = false
+    var showAlert = false
+    var alertTitle = ""
+    var alertMessage = ""
     
-    func addRecipe() async {
-        guard let userId = Auth.auth().currentUser?.uid else { return }
-        guard recipeName.count >= 2 else { return }
-        guard instructions.count >= 5 else { return }
-        guard preparationTime != 0 else { return }
-        guard let imageURL = await upload() else { return }
+    func addRecipe() async -> Bool {
+        guard let userId = Auth.auth().currentUser?.uid else {
+            createAlert(title: "Not Signed In", message: "Please sign in to create recipes.")
+            return false
+        }
+        guard recipeName.count >= 2 else {
+            createAlert(title: "Invalid Recipe Name", message: "Recipe name must be 2 or more characters long.")
+            return false
+        }
+        guard instructions.count >= 5 else {
+            createAlert(title: "Invalid Instructions", message: "Instructions must be 5 or more characters long.")
+            return false
+        }
+        guard preparationTime != 0 else {
+            createAlert(title: "Invalid Preparation Time", message: "Preparation time must be greater than 0 minutes.")
+            return false
+        }
+        guard let imageURL = await upload() else { return false }
         isLoading = true
         let ref = Firestore.firestore().collection("recipes").document()
         let recipe = Recipe(id: ref.documentID, name: recipeName, image: imageURL.absoluteString, instructions: instructions, time: preparationTime, userId: userId)
@@ -37,13 +52,23 @@ class AddRecipeViewModel {
             try Firestore.firestore().collection("recipes").document(ref.documentID).setData(from: recipe) { error in
                 if let error {
                     print(error.localizedDescription)
+                    self.createAlert(title: "Could Not Save Recipe", message: "We could not save your recipe right now. Please try later.")
                 }
                 self.isLoading = false
             }
+            return true
         } catch {
             print("DEBUG: Recipe Upload failed.")
+            createAlert(title: "Could Not Save Recipe", message: "We could not save your recipe right now. Please try later.")
             isLoading = false
+            return false
         }
+    }
+    
+    private func createAlert(title: String, message: String) {
+        alertTitle = title
+        alertMessage = message
+        showAlert = true
     }
     
     func upload() async -> URL? {
@@ -59,6 +84,7 @@ class AddRecipeViewModel {
         
         guard let imageData = recipeImage.jpegData(compressionQuality: 0.7) else {
             print("DEBUG: Upload failed - Could not convert image to JPEG data.")
+            createAlert(title: "Image Upload Failed", message: "Your recipe image could not be uploaded.")
             return nil
         }
         
@@ -83,6 +109,7 @@ class AddRecipeViewModel {
             return downloadURL
         } catch {
             isUploading = false
+            createAlert(title: "Image Upload Failed", message: "Your recipe image could not be uploaded.")
             print("DEBUG: Upload failed with error: \(error.localizedDescription)")
             return nil
         }
