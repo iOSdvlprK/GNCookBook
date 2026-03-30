@@ -11,6 +11,7 @@ import PhotosUI
 struct AddRecipeView: View {
     @State private var viewModel = AddRecipeViewModel()
     @State private var imageLoaderViewModel = ImageLoaderViewModel()
+    @Environment(\.dismiss) var dismiss
     
     var body: some View {
         ZStack {
@@ -66,7 +67,13 @@ struct AddRecipeView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                 Button(action: {
                     Task {
-                        await viewModel.addRecipe()
+                        if let imageURL = await viewModel.upload() {
+                            viewModel.addRecipe(imageURL: imageURL) { success in
+                                if success {
+                                    dismiss()
+                                }
+                            }
+                        }
                     }
                 }, label: {
                     Text("Add Recipe")
