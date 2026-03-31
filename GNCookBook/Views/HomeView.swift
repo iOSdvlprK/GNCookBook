@@ -29,6 +29,12 @@ struct HomeView: View {
     let spacing: CGFloat = 5
     let padding: CGFloat = 5
     
+    let columns = [
+        GridItem(.flexible(), spacing: 10),
+        GridItem(.flexible(), spacing: 10),
+        GridItem(.flexible(), spacing: 10)
+    ]
+    
     var itemWidth: CGFloat {
         guard let screen = UIScreen.current else { return .zero }
         let screenWidth = screen.bounds.width
@@ -41,16 +47,14 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                HStack(spacing: spacing) {
-                    ForEach(0...2, id: \.self) { index in
-                        NavigationLink {
-                            RecipeDetailView(recipe: Recipe.mockRecipes[index])
-                        } label: {
-                            RecipeRow(recipe: Recipe.mockRecipes[index])
+                ScrollView {
+                    LazyVGrid(columns: columns) {
+                        ForEach(Recipe.mockRecipes) { recipe in
+                            RecipeRow(recipe: recipe)
                         }
                     }
+                    .padding(padding)
                 }
-                .padding(.horizontal, padding)
                 Spacer()
                 Button(action: {
                     viewModel.showAddRecipeView = true
