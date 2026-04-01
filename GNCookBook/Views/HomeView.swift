@@ -84,6 +84,9 @@ struct HomeView: View {
                 }
             }
         }
+        .task {
+            await viewModel.fetchRecipes()
+        }
         .sheet(isPresented: $viewModel.showAddRecipeView) {
             AddRecipeView()
         }
