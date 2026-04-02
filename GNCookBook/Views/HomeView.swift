@@ -13,12 +13,19 @@ struct HomeView: View {
     
     fileprivate func RecipeRow(recipe: Recipe) -> some View {
         VStack(alignment: .leading) {
-            Image(recipe.image)
-                .resizable()
-                .aspectRatio(contentMode: .fill)
+            AsyncImage(url: URL(string: recipe.image)) { image in
+                image.resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: itemWidth, height: itemHeight)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .clipped()
+            } placeholder: {
+                VStack {
+                    ProgressView()
+                }
                 .frame(width: itemWidth, height: itemHeight)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-                .clipped()
+            }
+
             Text(recipe.name)
                 .lineLimit(1)
                 .font(.system(size: 15, weight: .semibold))
@@ -26,8 +33,8 @@ struct HomeView: View {
         }
     }
     
-    let spacing: CGFloat = 5
-    let padding: CGFloat = 5
+    let spacing: CGFloat = 10
+    let padding: CGFloat = 10
     
     let columns = [
         GridItem(.flexible(), spacing: 10),
@@ -49,7 +56,7 @@ struct HomeView: View {
             VStack {
                 ScrollView {
                     LazyVGrid(columns: columns) {
-                        ForEach(Recipe.mockRecipes) { recipe in
+                        ForEach(viewModel.recipes) { recipe in
                             RecipeRow(recipe: recipe)
                         }
                     }
