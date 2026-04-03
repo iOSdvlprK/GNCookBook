@@ -11,12 +11,20 @@ struct RecipeDetailView: View {
     let recipe: Recipe
     
     var body: some View {
-        VStack {
-            Image(recipe.image)
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(height: 250)
-                .clipped()
+        VStack(alignment: .leading) {
+            AsyncImage(url: URL(string: recipe.image)) { image in
+                image.resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(height: 250)
+                    .clipped()
+            } placeholder: {
+                ZStack {
+                    Rectangle()
+                        .fill(Color.gray)
+                        .frame(height: 250)
+                    Image(systemName: "photo.fill")
+                }
+            }
             HStack {
                 Text(recipe.name)
                     .font(.system(size: 22, weight: .semibold))
