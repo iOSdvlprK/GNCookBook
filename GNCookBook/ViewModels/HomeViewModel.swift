@@ -22,27 +22,7 @@ class HomeViewModel {
         }
         do {
             let recipesResult = try await Firestore.firestore().collection("recipes").whereField("userId", isEqualTo: userId).getDocuments()
-            for recipeDocument in recipesResult.documents {
-                let data = recipeDocument.data()
-                guard let imageLocation = data["image"] as? String else {
-                    continue
-                }
-                guard let instructions = data["instructions"] as? String else {
-                    continue
-                }
-                guard let name = data["name"] as? String else {
-                    continue
-                }
-                guard let time = data["time"] as? Int else {
-                    continue
-                }
-                guard let userId = data["userId"] as? String else {
-                    continue
-                }
-                let id = recipeDocument.documentID
-                let recipe = Recipe(id: id, name: name, image: imageLocation, instructions: instructions, time: time, userId: userId)
-                recipes.append(recipe)
-            }
+            recipes = recipesResult.documents.compactMap { Recipe(snapshot: $0) }
         } catch {
             print("DEBUG: Failed to fetch recipes: \(error.localizedDescription)")
         }

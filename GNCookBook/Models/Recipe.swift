@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FirebaseFirestore
 
 struct Recipe: Identifiable, Encodable {
     let id: String
@@ -22,6 +23,31 @@ struct Recipe: Identifiable, Encodable {
         self.instructions = instructions
         self.time = time
         self.userId = userId
+    }
+    
+    init?(snapshot: QueryDocumentSnapshot) {
+        let data = snapshot.data()
+        guard let image = data["image"] as? String else {
+            return nil
+        }
+        guard let instructions = data["instructions"] as? String else {
+            return nil
+        }
+        guard let name = data["name"] as? String else {
+            return nil
+        }
+        guard let time = data["time"] as? Int else {
+            return nil
+        }
+        guard let userId = data["userId"] as? String else {
+            return nil
+        }
+        self.image = image
+        self.instructions = instructions
+        self.name = name
+        self.time = time
+        self.userId = userId
+        self.id = snapshot.documentID
     }
 }
 
